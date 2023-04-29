@@ -9,8 +9,7 @@ export const Button = styled.button`
   padding: 10px 0px 10px 0px;
   border: none;
   border-radius: 10px;
-  width: 100%;
-  max-width: 400px;
+  width: 300px;
   height: 55px;
   cursor: pointer;
 `;

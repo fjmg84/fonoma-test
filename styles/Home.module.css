@@ -1,16 +1,14 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: baseline;
   align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
+  margin: 10% 0;
+  height: 100vh;
 }
 
 .selector {
-  width: 100%;
-  max-width: 400px;
-  min-width: 400px;
+  width: 300px;
   margin: 2%;
   padding: 0%;
   font-size: 18px;
@@ -18,15 +16,4 @@
 
 .selector input {
   height: 35px;
-}
-
-/* Mobile */
-@media (max-width: 700px) {
-}
-
-/* Tablet and Smaller Desktop */
-@media (min-width: 701px) and (max-width: 1120px) {
-}
-
-@media (prefers-color-scheme: dark) {
 }

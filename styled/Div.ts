@@ -15,7 +15,7 @@ export const ContainerData = styled.div`
   align-items: center;
   justify-content: center;
   gap: 30px;
-  width: 400px;
+  width: 300px;
   height: 100%;
   min-height: 300px;
   max-height: 400px;

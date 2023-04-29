@@ -63,7 +63,7 @@ export default function Home({ listSymbols }: any) {
             <Button>send</Button>
           </ContainerForm>
         </form>
-        <div>
+        <div className="container">
           {isLoading && <div className="loading" />}
           {isError.state && <h4 className="error">{isError.message}</h4>}
           {!isLoading && values?.success && (
@@ -88,12 +88,10 @@ export default function Home({ listSymbols }: any) {
 }
 
 export async function getServerSideProps() {
-  let { success, symbols } = currentSymbols; //await getCurrentSymbol();
+  let { success, symbols } = currentSymbols; /* await getCurrentSymbol() */
   let listSymbols: any = [];
 
   if (success) {
-    /*  type T = keyof typeof symbols; */
-
     for (const property in symbols) {
       listSymbols = [
         ...listSymbols,
@@ -106,6 +104,6 @@ export async function getServerSideProps() {
   } else listSymbols = [];
 
   return {
-    props: { listSymbols }, // will be passed to the page component as props
+    props: { listSymbols },
   };
 }
