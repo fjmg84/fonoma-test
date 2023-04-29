@@ -1,6 +1,6 @@
 import { ValuesQuery } from "@/interfaces";
 
-const API_KEY = process.env.API_LAYER;
+const API_KEY = process.env.NEXT_PUBLIC_API_LAYER;
 
 export const getCurrentSymbol = async () => {
   let headersList = {
@@ -23,7 +23,7 @@ export const getCurrentSymbol = async () => {
 export const getConvert = async ({ amount, from, to }: ValuesQuery) => {
   let headersList = {
     Accept: "*/*",
-    apikey: "II1qJimB6cAnX4Kh0gevC3U3N6lKh765",
+    apikey: API_KEY as string,
   };
 
   let response = await fetch(
