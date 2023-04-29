@@ -1,11 +1,35 @@
+import { FormEvent, useState } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 
+import { getConvert, getCurrentSymbol } from "@/utils/services";
+import Select from "react-select";
+
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({ listSymbols }: any) {
+  const [options] = useState(listSymbols);
+  const [values, setValues] = useState({
+    amount: 0,
+    from: "",
+    to: "",
+  });
+
+  const handleChange = (e: any) => {
+    let key: any = Object.keys(e)[0];
+    if (key) setValues({ ...values, [key]: e[key].value });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let resp = await getConvert({
+      amount: values.amount,
+      from: values.from,
+      to: values.to,
+    });
+  };
+
   return (
     <>
       <Head>
@@ -14,7 +38,57 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}></main>
+      <main className={`${styles.main} ${inter.className}`}>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <input
+            onChange={(e) => handleChange({ amount: e.target })}
+            type="text"
+            placeholder="coin amount"
+            name="mount"
+          />
+
+          <Select
+            name="from"
+            defaultValue={values.from}
+            onChange={(e) => handleChange({ from: e })}
+            options={options}
+          />
+
+          <Select
+            name="to"
+            defaultValue={values.to}
+            onChange={(e) => handleChange({ to: e })}
+            options={options && options}
+          />
+
+          <button>send</button>
+        </form>
+      </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  let { success, symbols } = await getCurrentSymbol();
+  let listSymbols: any = [];
+
+  if (success) {
+    type T = keyof typeof symbols;
+
+    let data: any = [];
+
+    for (const property in symbols) {
+      listSymbols = [
+        ...listSymbols,
+        {
+          value: property,
+          label: `${property} - ${symbols[property as keyof typeof symbols]}`,
+        },
+      ];
+    }
+  } else listSymbols = [];
+
+  return {
+    props: { listSymbols }, // will be passed to the page component as props
+  };
 }
