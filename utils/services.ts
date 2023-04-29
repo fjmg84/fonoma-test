@@ -1,3 +1,5 @@
+import { ValuesQuery } from "@/interfaces";
+
 const API_KEY = process.env.API_LAYER;
 
 export const getCurrentSymbol = async () => {
@@ -18,11 +20,6 @@ export const getCurrentSymbol = async () => {
   return data;
 };
 
-export interface ValuesQuery {
-  amount: number;
-  from: string;
-  to: string;
-}
 export const getConvert = async ({ amount, from, to }: ValuesQuery) => {
   let headersList = {
     Accept: "*/*",
