@@ -66,7 +66,7 @@ export default function Home({ listSymbols }: any) {
         <div>
           {isLoading && <div className="loading" />}
           {isError.state && <h4 className="error">{isError.message}</h4>}
-          {values?.success && (
+          {!isLoading && values?.success && (
             <ContainerData>
               <h4 className="amount">
                 <span>from:</span>
