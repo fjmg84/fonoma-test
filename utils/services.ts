@@ -1,7 +1,11 @@
+import { ValuesQuery } from "@/interfaces";
+
+const API_KEY = process.env.NEXT_PUBLIC_API_LAYER;
+
 export const getCurrentSymbol = async () => {
   let headersList = {
     Accept: "*/*",
-    apikey: "II1qJimB6cAnX4Kh0gevC3U3N6lKh765",
+    apikey: API_KEY as string,
   };
 
   let response = await fetch(
@@ -12,24 +16,26 @@ export const getCurrentSymbol = async () => {
     }
   );
 
-  let data = await response.text();
-  console.log(data);
+  let data = await response.json();
+  return data;
 };
 
-export const getConvert = async () => {
+export const getConvert = async ({ amount, from, to }: ValuesQuery) => {
   let headersList = {
     Accept: "*/*",
-    apikey: "II1qJimB6cAnX4Kh0gevC3U3N6lKh765",
+    apikey: API_KEY as string,
   };
 
   let response = await fetch(
-    "https://api.apilayer.com/exchangerates_data/convert?to=JPY&from=GBP&amount=25",
+    `https://api.apilayer.com/exchangerates_data/convert?to=${to}&from=${from}&amount=${Number(
+      amount
+    )}`,
     {
       method: "GET",
       headers: headersList,
     }
   );
 
-  let data = await response.text();
-  console.log(data);
+  let data = await response.json();
+  return data;
 };
