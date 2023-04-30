@@ -2,13 +2,13 @@ import { FormEvent, useRef, useState } from "react";
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import Select from "react-select";
-import { QueryClient, useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 import { getConvert, getCurrentSymbol } from "@/utils/services";
 import { Button } from "@/styled/Button";
 import { Input } from "@/styled/Input";
 
-import currentSymbols from "../data/currentSymbols.json";
+// import currentSymbols from "../data/currentSymbols.json";
 import { ContainerData, ContainerForm } from "@/styled/Div";
 import styles from "@/styles/Home.module.css";
 import { ValuesQuery } from "@/interfaces";
@@ -98,7 +98,7 @@ export default function Home({ listSymbols }: any) {
 }
 
 export async function getServerSideProps() {
-  let { success, symbols } = currentSymbols; /* await getCurrentSymbol() */
+  let { success, symbols } = await getCurrentSymbol();
   let listSymbols: any = [];
 
   if (success) {
