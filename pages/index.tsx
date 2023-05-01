@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import Select from "react-select";
@@ -8,7 +8,6 @@ import { getConvert, getCurrentSymbol } from "@/utils/services";
 import { Button } from "@/styled/Button";
 import { Input } from "@/styled/Input";
 
-// import currentSymbols from "../data/currentSymbols.json";
 import { ContainerData, ContainerForm } from "@/styled/Div";
 import styles from "@/styles/Home.module.css";
 import { ValuesQuery } from "@/interfaces";
@@ -16,20 +15,25 @@ import { ValuesQuery } from "@/interfaces";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home({ listSymbols }: any) {
-  const [options] = useState(listSymbols);
+  const [options, setOptions] = useState([]);
   const prevValues = useRef<ValuesQuery>();
 
   const { mutate, isLoading, isError, data: values } = useMutation(getConvert);
+
+  useEffect(() => {
+    setOptions(listSymbols);
+  }, [listSymbols]);
 
   const handleSubmit = async (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
     const { target } = e;
 
     let data: any = Object.fromEntries(new FormData(target as HTMLFormElement));
+    const { amount, from, to } = data;
     if (
-      prevValues.current?.amount === data.amount &&
-      prevValues.current?.from === data.from &&
-      prevValues.current?.to === data.to
+      prevValues.current?.amount === amount &&
+      prevValues.current?.from === from &&
+      prevValues.current?.to === to
     )
       return;
     else {
@@ -47,7 +51,7 @@ export default function Home({ listSymbols }: any) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form role="form" onSubmit={(e) => handleSubmit(e)}>
           <ContainerForm>
             <Input
               required
@@ -55,22 +59,26 @@ export default function Home({ listSymbols }: any) {
               placeholder="coin amount"
               name="amount"
             />
+            <div data-testid="from_selector">
+              <Select
+                className={`from ${styles.selector}`}
+                defaultValue={""}
+                options={options}
+                placeholder="from this current"
+                name="from"
+                required
+              />
+            </div>
+            <div data-testid="to_selector">
+              <Select
+                className={`to ${styles.selector}`}
+                name="to"
+                defaultValue={""}
+                options={options && options}
+              />
+            </div>
 
-            <Select
-              className={styles.selector}
-              name="from"
-              defaultValue={""}
-              options={options}
-            />
-
-            <Select
-              className={styles.selector}
-              name="to"
-              defaultValue={""}
-              options={options && options}
-            />
-
-            <Button>send</Button>
+            <Button data-testid="send">send</Button>
           </ContainerForm>
         </form>
         <div className="container">
@@ -98,10 +106,10 @@ export default function Home({ listSymbols }: any) {
 }
 
 export async function getServerSideProps() {
-  let { success, symbols } = await getCurrentSymbol();
-  let listSymbols: any = [];
+  try {
+    let { symbols } = await getCurrentSymbol();
+    let listSymbols: (typeof symbols)[] = [];
 
-  if (success) {
     for (const property in symbols) {
       listSymbols = [
         ...listSymbols,
@@ -111,9 +119,13 @@ export async function getServerSideProps() {
         },
       ];
     }
-  } else listSymbols = [];
 
-  return {
-    props: { listSymbols },
-  };
+    return {
+      props: { listSymbols },
+    };
+  } catch (error) {
+    return {
+      props: {},
+    };
+  }
 }
