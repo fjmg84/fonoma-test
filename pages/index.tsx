@@ -11,12 +11,12 @@ import { Input } from "@/styled/Input";
 // import currentSymbols from "../data/currentSymbols.json";
 import { ContainerData, ContainerForm } from "@/styled/Div";
 import styles from "@/styles/Home.module.css";
-import { ValuesQuery } from "@/interfaces";
+import { ListSymbols, ValuesQuery } from "@/interfaces";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home({ listSymbols }: any) {
-  const [options] = useState(listSymbols);
+export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
+  const [options] = useState<ListSymbols[]>(listSymbols);
   const prevValues = useRef<ValuesQuery>();
 
   const { mutate, isLoading, isError, data: values } = useMutation(getConvert);
@@ -60,14 +60,14 @@ export default function Home({ listSymbols }: any) {
               className={styles.selector}
               name="from"
               defaultValue={""}
-              options={options}
+              options={options as keyof typeof Option}
             />
 
             <Select
               className={styles.selector}
               name="to"
               defaultValue={""}
-              options={options && options}
+              options={options as keyof typeof Option}
             />
 
             <Button>send</Button>
@@ -99,7 +99,7 @@ export default function Home({ listSymbols }: any) {
 
 export async function getServerSideProps() {
   let { success, symbols } = await getCurrentSymbol();
-  let listSymbols: any = [];
+  let listSymbols: ListSymbols[] = [];
 
   if (success) {
     for (const property in symbols) {
@@ -111,7 +111,7 @@ export async function getServerSideProps() {
         },
       ];
     }
-  } else listSymbols = [];
+  }
 
   return {
     props: { listSymbols },
