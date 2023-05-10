@@ -10,18 +10,18 @@ import { Input } from "@/styled/Input";
 
 import { ContainerData, ContainerForm } from "@/styled/Div";
 import styles from "@/styles/Home.module.css";
-import { ValuesQuery } from "@/interfaces";
+import { ListSymbols, ValuesQuery } from "@/interfaces";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home({ listSymbols }: any) {
-  const [options, setOptions] = useState([]);
+export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
+  const [options, setOptions] = useState<ListSymbols[]>([]);
   const prevValues = useRef<ValuesQuery>();
 
   const { mutate, isLoading, isError, data: values } = useMutation(getConvert);
 
   useEffect(() => {
-    setOptions(listSymbols);
+    if (listSymbols.length > 0) setOptions(listSymbols);
   }, [listSymbols]);
 
   const handleSubmit = async (e: FormEvent<HTMLElement>) => {
@@ -59,26 +59,22 @@ export default function Home({ listSymbols }: any) {
               placeholder="coin amount"
               name="amount"
             />
-            <div data-testid="from_selector">
-              <Select
-                className={`from ${styles.selector}`}
-                defaultValue={""}
-                options={options}
-                placeholder="from this current"
-                name="from"
-                required
-              />
-            </div>
-            <div data-testid="to_selector">
-              <Select
-                className={`to ${styles.selector}`}
-                name="to"
-                defaultValue={""}
-                options={options && options}
-              />
-            </div>
 
-            <Button data-testid="send">send</Button>
+            <Select
+              className={styles.selector}
+              name="from"
+              defaultValue={""}
+              options={options as keyof typeof Option}
+            />
+
+            <Select
+              className={styles.selector}
+              name="to"
+              defaultValue={""}
+              options={options as keyof typeof Option}
+            />
+
+            <Button>send</Button>
           </ContainerForm>
         </form>
         <div className="container">
@@ -106,26 +102,28 @@ export default function Home({ listSymbols }: any) {
 }
 
 export async function getServerSideProps() {
-  try {
-    let { symbols } = await getCurrentSymbol();
-    let listSymbols: (typeof symbols)[] = [];
+  let listSymbols: ListSymbols[] = [];
 
-    for (const property in symbols) {
-      listSymbols = [
-        ...listSymbols,
-        {
-          value: property,
-          label: `${property} - ${symbols[property as keyof typeof symbols]}`,
-        },
-      ];
-    }
+  try {
+    let { success, symbols } = await getCurrentSymbol();
+
+    if (success)
+      for (const property in symbols) {
+        listSymbols = [
+          ...listSymbols,
+          {
+            value: property,
+            label: `${property} - ${symbols[property as keyof typeof symbols]}`,
+          },
+        ];
+      }
 
     return {
       props: { listSymbols },
     };
   } catch (error) {
     return {
-      props: {},
+      props: { listSymbols },
     };
   }
 }

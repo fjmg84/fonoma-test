@@ -11,3 +11,8 @@ export interface ValuesResponse {
   date?: string;
   result?: number;
 }
+
+export interface ListSymbols {
+  value: string;
+  label: string;
+}
