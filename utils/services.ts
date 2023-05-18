@@ -8,16 +8,20 @@ export const getCurrentSymbol = async () => {
     apikey: API_KEY as string,
   };
 
-  let response = await fetch(
-    "https://api.apilayer.com/exchangerates_data/symbols",
-    {
-      method: "GET",
-      headers: headersList,
-    }
-  );
+  try {
+    let response = await fetch(
+      "https://api.apilayer.com/exchangerates_data/symbols",
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
 
-  let data = await response.json();
-  return data;
+    let data = await response.json();
+    return data;
+  } catch (error) {
+    return new Error("error fetching symbols");
+  }
 };
 
 export const getConvert = async ({ amount, from, to }: ValuesQuery) => {
@@ -26,16 +30,20 @@ export const getConvert = async ({ amount, from, to }: ValuesQuery) => {
     apikey: API_KEY as string,
   };
 
-  let response = await fetch(
-    `https://api.apilayer.com/exchangerates_data/convert?to=${to}&from=${from}&amount=${Number(
-      amount
-    )}`,
-    {
-      method: "GET",
-      headers: headersList,
-    }
-  );
+  try {
+    let response = await fetch(
+      `https://api.apilayer.com/exchangerates_data/convert?to=${to}&from=${from}&amount=${Number(
+        amount
+      )}`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    );
 
-  let data = await response.json();
-  return data;
+    let data = await response.json();
+    return data;
+  } catch (error) {
+    return new Error("error fetching convert current");
+  }
 };
