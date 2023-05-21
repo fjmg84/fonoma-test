@@ -1,13 +1,9 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from "@testing-library/react";
+import "whatwg-fetch";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Home from "../pages/index";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "../pages/_app";
+import { server } from "@/mocks/server";
 
 const mockGetConvert = jest.fn().mockResolvedValue({
   success: true,
@@ -30,6 +26,10 @@ const listSymbolsData = [
 ];
 
 describe("Home component", () => {
+  beforeAll(() => server.listen());
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
   const wrapper = (children: React.ReactNode) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
@@ -61,5 +61,8 @@ describe("Home component", () => {
 
     fireEvent.click(submitButton);
     waitFor(() => expect(mockGetConvert).toHaveBeenCalledTimes(1));
+
+    const amountResult = await screen.findByText("from:");
+    expect(amountResult).toBeDefined();
   });
 });

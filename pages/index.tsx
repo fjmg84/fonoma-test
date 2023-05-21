@@ -80,6 +80,7 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
             <Button>send</Button>
           </ContainerForm>
         </form>
+
         <div className="container">
           {isLoading && <div className="loading" />}
           {isError && <h4 className="error">{isError}</h4>}
