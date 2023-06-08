@@ -1,5 +1,5 @@
 export interface ValuesQuery {
-  amount: number;
+  amount: number | string;
   from: string;
   to: string;
 }
