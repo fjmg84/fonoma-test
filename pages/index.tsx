@@ -9,8 +9,8 @@ import { Button } from "@/styled-components/Button";
 import { Input } from "@/styled-components/Input";
 
 import { ContainerData, ContainerForm } from "@/styled-components/Div";
-import styles from "@/styles/Home.module.css";
 import { ListSymbols, ValuesQuery } from "@/interfaces";
+import styles from "@/styles/Home.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +29,7 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
     const { target } = e;
 
     let data: any = Object.fromEntries(new FormData(target as HTMLFormElement));
+    console.log(data);
     const { amount, from, to } = data;
     if (
       prevValues.current?.amount === amount &&
