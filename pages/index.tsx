@@ -5,10 +5,10 @@ import Select from "react-select";
 import { useMutation } from "react-query";
 
 import { getConvert, getCurrentSymbol } from "@/utils/services";
-import { Button } from "@/styled/Button";
-import { Input } from "@/styled/Input";
+import { Button } from "@/styled-components/Button";
+import { Input } from "@/styled-components/Input";
 
-import { ContainerData, ContainerForm } from "@/styled/Div";
+import { ContainerData, ContainerForm } from "@/styled-components/Div";
 import styles from "@/styles/Home.module.css";
 import { ListSymbols, ValuesQuery } from "@/interfaces";
 
@@ -36,10 +36,9 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
       prevValues.current?.to === to
     )
       return;
-    else {
-      prevValues.current = { ...data };
-      mutate(data);
-    }
+
+    prevValues.current = { ...data };
+    mutate(data);
   };
 
   return (
