@@ -1,7 +1,7 @@
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import currentSymbols from "../data/currentSymbols.json";
-import responseData from "../data/data.json";
+import currentSymbols from "@/data/currentSymbols.json";
+import responseData from "@/data/data.json";
 
 const URL_API = `https://api.apilayer.com/exchangerates_data/`;
 
