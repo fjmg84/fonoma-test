@@ -10,7 +10,6 @@ import { Input, Label } from "@/styled-components/Input";
 
 import { ContainerData, Container } from "@/styled-components/Div";
 import { ListSymbols, ValuesQuery } from "@/interfaces";
-import currentSymbols from "@/data/currentSymbols.json";
 import styles from "@/styles/Home.module.scss";
 
 const inter = Inter({ subsets: ["latin"] });
