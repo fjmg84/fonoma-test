@@ -6,13 +6,23 @@ import { useMutation } from "react-query";
 
 import { getConvert, getCurrentSymbol } from "@/utils/services";
 import { Button } from "@/styled-components/Button";
-import { Input } from "@/styled-components/Input";
+import { Input, Label } from "@/styled-components/Input";
 
-import { ContainerData, ContainerForm } from "@/styled-components/Div";
+import { ContainerData, Container } from "@/styled-components/Div";
 import { ListSymbols, ValuesQuery } from "@/interfaces";
-import styles from "@/styles/Home.module.css";
+import currentSymbols from "@/data/currentSymbols.json";
+import styles from "@/styles/Home.module.scss";
 
 const inter = Inter({ subsets: ["latin"] });
+const DATA_TESTS = {
+  success: true,
+  result: 0.1223456,
+  query: {
+    amount: 25,
+    from: "CUC",
+    to: "CUC",
+  },
+};
 
 export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
   const [options, setOptions] = useState<ListSymbols[]>([]);
@@ -21,7 +31,7 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
   const { mutate, isLoading, isError, data: values } = useMutation(getConvert);
 
   useEffect(() => {
-    if (listSymbols.length > 0) setOptions(listSymbols);
+    listSymbols.length > 0 && setOptions(listSymbols);
   }, [listSymbols]);
 
   const handleSubmit = async (e: FormEvent<HTMLElement>) => {
@@ -29,12 +39,13 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
     const { target } = e;
 
     let data: any = Object.fromEntries(new FormData(target as HTMLFormElement));
-    console.log(data);
-    const { amount, from, to } = data;
+
+    const { amount, from, to, date } = data;
     if (
       prevValues.current?.amount === amount &&
       prevValues.current?.from === from &&
-      prevValues.current?.to === to
+      prevValues.current?.to === to &&
+      prevValues.current?.date === date
     )
       return;
 
@@ -51,54 +62,70 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={`${styles.main} ${inter.className}`}>
-        <form role="form" onSubmit={(e) => handleSubmit(e)}>
-          <ContainerForm>
-            <Input
-              required
-              type="number"
-              placeholder="coin amount"
-              name="amount"
-            />
+      <main className={inter.className}>
+        <div className={styles.container}>
+          <form role="form" onSubmit={(e) => handleSubmit(e)}>
+            <Container>
+              <Input
+                required
+                type="number"
+                placeholder="coin amount"
+                name="amount"
+              />
 
-            <Select
-              className={styles.selector}
-              name="from"
-              defaultValue={""}
-              placeholder="Select from"
-              options={options as keyof typeof Option}
-            />
+              <Select
+                className={styles.selector}
+                name="from"
+                defaultValue={""}
+                placeholder="Select from"
+                options={options as keyof typeof Option}
+              />
 
-            <Select
-              className={styles.selector}
-              name="to"
-              defaultValue={""}
-              placeholder="Select to"
-              options={options as keyof typeof Option}
-            />
+              <Select
+                className={styles.selector}
+                name="to"
+                defaultValue={""}
+                placeholder="Select to"
+                options={options as keyof typeof Option}
+              />
 
-            <Button>send</Button>
-          </ContainerForm>
-        </form>
+              <Label>
+                <Input type="date" name="date" />
+                *Specify a date to use historical rates for this
+                currency.(Optional)
+              </Label>
 
-        <div className="container">
-          {isLoading && <div className="loading" />}
-          {isError && <h4 className="error">{isError}</h4>}
-          {!isLoading && values?.success && (
-            <ContainerData>
-              <h4 className="amount">
-                <span>from:</span>
-                {values.query?.amount}
-                <small>{values.query?.from}</small>
-              </h4>
+              <Button>send</Button>
+            </Container>
+          </form>
 
-              <h4 className="result">
-                <span>to:</span>
-                {values.result}
-                <small>{values.query?.to}</small>
-              </h4>
-            </ContainerData>
-          )}
+          <Container>
+            {isLoading && <div className="loading" />}
+            {isError && <h4 className="error">{isError}</h4>}
+            {!isLoading && values?.success ? (
+              <>
+                <h2>Your current change</h2>
+                <h4 className={styles.amount}>
+                  <ContainerData>
+                    {values.query?.amount}
+                    <small>{values.query?.from}</small>
+                  </ContainerData>
+                </h4>
+
+                <span>
+                  <i className="fa fa-arrow-down"></i>
+                </span>
+                <h4 className={styles.result}>
+                  <ContainerData>
+                    {values.result}
+                    <small>{values.query?.to}</small>
+                  </ContainerData>
+                </h4>
+              </>
+            ) : (
+              <h4 className="error">{values?.error?.message}</h4>
+            )}
+          </Container>
         </div>
       </main>
     </>

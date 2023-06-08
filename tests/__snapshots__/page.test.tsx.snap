@@ -12,10 +12,10 @@ exports[`Home component should return snapshot 1`] = `
           role="form"
         >
           <div
-            class="sc-ea965576-0 bIizNB"
+            class="sc-455dbc50-0 cHyfPK"
           >
             <input
-              class="sc-16994ea9-0 hQxEHv"
+              class="sc-bf9430af-0 bIPcBP"
               name="amount"
               placeholder="coin amount"
               required=""
@@ -180,7 +180,7 @@ exports[`Home component should return snapshot 1`] = `
               />
             </div>
             <button
-              class="sc-11f9b9d3-0 deyJg"
+              class="sc-1aec364b-0 ddutlm"
             >
               send
             </button>
@@ -188,7 +188,40 @@ exports[`Home component should return snapshot 1`] = `
         </form>
         <div
           class="container"
-        />
+        >
+          <h2>
+            Your current change
+          </h2>
+          <h4
+            class="amount"
+          >
+            <div
+              class="sc-455dbc50-1 fABgql"
+            >
+              25
+              <small>
+                CUC
+              </small>
+            </div>
+          </h4>
+          <span>
+            <i
+              class="fa fa-arrow-down"
+            />
+          </span>
+          <h4
+            class="result"
+          >
+            <div
+              class="sc-455dbc50-1 fABgql"
+            >
+              0.1223456
+              <small>
+                CUC
+              </small>
+            </div>
+          </h4>
+        </div>
       </main>
     </div>
   </body>,
@@ -200,10 +233,10 @@ exports[`Home component should return snapshot 1`] = `
         role="form"
       >
         <div
-          class="sc-ea965576-0 bIizNB"
+          class="sc-455dbc50-0 cHyfPK"
         >
           <input
-            class="sc-16994ea9-0 hQxEHv"
+            class="sc-bf9430af-0 bIPcBP"
             name="amount"
             placeholder="coin amount"
             required=""
@@ -368,7 +401,7 @@ exports[`Home component should return snapshot 1`] = `
             />
           </div>
           <button
-            class="sc-11f9b9d3-0 deyJg"
+            class="sc-1aec364b-0 ddutlm"
           >
             send
           </button>
@@ -376,7 +409,40 @@ exports[`Home component should return snapshot 1`] = `
       </form>
       <div
         class="container"
-      />
+      >
+        <h2>
+          Your current change
+        </h2>
+        <h4
+          class="amount"
+        >
+          <div
+            class="sc-455dbc50-1 fABgql"
+          >
+            25
+            <small>
+              CUC
+            </small>
+          </div>
+        </h4>
+        <span>
+          <i
+            class="fa fa-arrow-down"
+          />
+        </span>
+        <h4
+          class="result"
+        >
+          <div
+            class="sc-455dbc50-1 fABgql"
+          >
+            0.1223456
+            <small>
+              CUC
+            </small>
+          </div>
+        </h4>
+      </div>
     </main>
   </div>,
   "debug": [Function],

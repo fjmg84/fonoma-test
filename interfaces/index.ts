@@ -2,6 +2,7 @@ export interface ValuesQuery {
   amount: number | string;
   from: string;
   to: string;
+  date?: string;
 }
 
 export interface ValuesResponse {

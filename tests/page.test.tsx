@@ -62,7 +62,7 @@ describe("Home component", () => {
     fireEvent.click(submitButton);
     waitFor(() => expect(mockGetConvert).toHaveBeenCalledTimes(1));
 
-    const amountResult = await screen.findByText("from:");
+    const amountResult = await screen.findByText(/Your current change/i);
     expect(amountResult).toBeDefined();
   });
 });

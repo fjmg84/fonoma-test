@@ -24,7 +24,7 @@ export const getCurrentSymbol = async () => {
   }
 };
 
-export const getConvert = async ({ amount, from, to }: ValuesQuery) => {
+export const getConvert = async ({ amount, from, to, date }: ValuesQuery) => {
   let headersList = {
     Accept: "*/*",
     apikey: API_KEY as string,
@@ -34,7 +34,7 @@ export const getConvert = async ({ amount, from, to }: ValuesQuery) => {
     let response = await fetch(
       `https://api.apilayer.com/exchangerates_data/convert?to=${to}&from=${from}&amount=${Number(
         amount
-      )}`,
+      )}&date=${date}`,
       {
         method: "GET",
         headers: headersList,
