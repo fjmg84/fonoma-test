@@ -1,6 +1,6 @@
 import { ValuesQuery } from "@/interfaces";
 
-const API_KEY = process.env.NEXT_PUBLIC_API_LAYER;
+const API_KEY = process.env.NEXT_PUBLIC_PROD_API_LAYER;
 
 export const getCurrentSymbol = async () => {
   let headersList = {
