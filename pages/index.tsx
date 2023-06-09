@@ -25,7 +25,6 @@ const DATA_TESTS = {
 };
 
 export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
-  console.log("Home", listSymbols);
   const [options, setOptions] = useState<ListSymbols[]>([]);
   const prevValues = useRef<ValuesQuery>();
 
@@ -105,7 +104,14 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
             {isError && <h4 className="error">{isError}</h4>}
             {!isLoading && values?.success ? (
               <>
-                <h2>Your current change</h2>
+                <h2>
+                  Your current change is <small>{values?.date}</small>
+                </h2>
+
+                <h3>
+                  Rate: <small>{values?.info?.rate}</small>
+                </h3>
+
                 <h4 className={styles.amount}>
                   <ContainerData>
                     {values.query?.amount}

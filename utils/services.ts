@@ -18,7 +18,6 @@ export const getCurrentSymbol = async () => {
     );
 
     let data = await response.json();
-    console.log("services", data);
     return data;
   } catch (error) {
     return new Error("error fetching symbols");
