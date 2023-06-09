@@ -13,6 +13,7 @@ import { ListSymbols, ValuesQuery } from "@/interfaces";
 import styles from "@/styles/Home.module.scss";
 
 const inter = Inter({ subsets: ["latin"] });
+
 const DATA_TESTS = {
   success: true,
   result: 0.1223456,
@@ -24,13 +25,14 @@ const DATA_TESTS = {
 };
 
 export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
+  console.log("Home", listSymbols);
   const [options, setOptions] = useState<ListSymbols[]>([]);
   const prevValues = useRef<ValuesQuery>();
 
   const { mutate, isLoading, isError, data: values } = useMutation(getConvert);
 
   useEffect(() => {
-    listSymbols.length > 0 && setOptions(listSymbols);
+    if (listSymbols.length > 0) setOptions(listSymbols);
   }, [listSymbols]);
 
   const handleSubmit = async (e: FormEvent<HTMLElement>) => {
