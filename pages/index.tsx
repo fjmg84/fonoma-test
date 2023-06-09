@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { Inter } from "next/font/google";
-import Select from "react-select";
+
 import { useMutation } from "react-query";
 
 import { getConvert, getCurrentSymbol } from "@/utils/services";
@@ -11,6 +11,7 @@ import { Input, Label } from "@/styled-components/Input";
 import { ContainerData, Container } from "@/styled-components/Div";
 import { ListSymbols, ValuesQuery } from "@/interfaces";
 import styles from "@/styles/Home.module.scss";
+import { Form } from "@/components/Form";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,14 +26,9 @@ const DATA_TESTS = {
 };
 
 export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
-  const [options, setOptions] = useState<ListSymbols[]>([]);
   const prevValues = useRef<ValuesQuery>();
 
   const { mutate, isLoading, isError, data: values } = useMutation(getConvert);
-
-  useEffect(() => {
-    if (listSymbols.length > 0) setOptions(listSymbols);
-  }, [listSymbols]);
 
   const handleSubmit = async (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -64,74 +60,51 @@ export default function Home({ listSymbols }: { listSymbols: ListSymbols[] }) {
 
       <main className={inter.className}>
         <div className={styles.container}>
-          <form role="form" onSubmit={(e) => handleSubmit(e)}>
-            <Container>
-              <Input
-                required
-                type="number"
-                placeholder="coin amount"
-                name="amount"
-              />
-
-              <Select
-                className={styles.selector}
-                name="from"
-                defaultValue={""}
-                placeholder="Select from"
-                options={options as keyof typeof Option}
-              />
-
-              <Select
-                className={styles.selector}
-                name="to"
-                defaultValue={""}
-                placeholder="Select to"
-                options={options as keyof typeof Option}
-              />
-
-              <Label>
-                <Input type="date" name="date" />
-                *Specify a date to use historical rates for this
-                currency.(Optional)
-              </Label>
-
-              <Button>send</Button>
-            </Container>
-          </form>
-
           <Container>
-            {isLoading && <div className="loading" />}
-            {isError && <h4 className="error">{isError}</h4>}
-            {!isLoading && values?.success ? (
+            <div className={styles.container}>
+              <Form handleSubmit={handleSubmit} options={listSymbols} />
               <>
-                <h2>
-                  Your current change is <small>{values?.date}</small>
-                </h2>
+                {!isLoading && values?.success ? (
+                  <Container>
+                    <table className={styles.table}>
+                      <tbody>
+                        <tr>
+                          <td>date:</td>
+                          <td>{values?.date}</td>
+                        </tr>
+                        <tr>
+                          <td>rate:</td>
+                          <td>{values?.info?.rate}</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                <h3>
-                  Rate: <small>{values?.info?.rate}</small>
-                </h3>
+                    <h4 className={styles.amount}>
+                      <ContainerData>
+                        {values.query?.amount}
+                        <small>{values.query?.from}</small>
+                      </ContainerData>
+                    </h4>
 
-                <h4 className={styles.amount}>
-                  <ContainerData>
-                    {values.query?.amount}
-                    <small>{values.query?.from}</small>
-                  </ContainerData>
-                </h4>
+                    <span>
+                      <i className="fa fa-arrow-down"></i>
+                    </span>
 
-                <span>
-                  <i className="fa fa-arrow-down"></i>
-                </span>
-                <h4 className={styles.result}>
-                  <ContainerData>
-                    {values.result}
-                    <small>{values.query?.to}</small>
-                  </ContainerData>
-                </h4>
+                    <h4 className={styles.result}>
+                      <ContainerData>
+                        {values.result}
+                        <small>{values.query?.to}</small>
+                      </ContainerData>
+                    </h4>
+                  </Container>
+                ) : (
+                  <h4 className="error">{values?.error?.message}</h4>
+                )}
+
+                {isLoading && <div className="loading" />}
+                {isError && <h4 className="error">{isError}</h4>}
               </>
-            ) : (
-              <h4 className="error">{values?.error?.message}</h4>
-            )}
+            </div>
           </Container>
         </div>
       </main>
